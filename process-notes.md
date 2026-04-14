@@ -72,3 +72,11 @@
 - **Learner verification:** Confirmed "both the frontend and backend works" after the pin fix.
 - **Notable:** `frontend/AGENTS.md` warns this Next.js version has breaking changes — docs live in `node_modules/next/dist/docs/`. Must consult those before writing frontend code in steps 8–9b.
 
+### Step 2: LangGraph skeleton with stub nodes + state + tests
+- **What was built:** `backend/graph/state.py` (ResearchState TypedDict with `status_message` using a last-value-wins reducer to handle parallel writes from fundamentals + news), four stub nodes under `backend/graph/nodes/` each returning a `status_message` + placeholder payload, `backend/graph/graph.py` wiring `START → validate → fan-out[fundamentals, news] → synthesis → END`. Added `backend/tests/test_graph.py` with 3 cases (node sequence, fan-out before synthesis, status messages populated). Configured pytest-asyncio auto mode + pythonpath in pyproject.
+- **Spec-vs-reality drift:** Spec snippet shows `add_conditional_edges` with `{"gather": ["fundamentals", "news"]}` as the path-map. LangGraph's current API rejects a list as a mapping destination (`TypeError: unhashable type: 'list'`). Fix: router function returns the list directly; no path-map needed. Worth revisiting spec.md if we want it to match the real code.
+- **Decisions narrated:** (1) `status_message` reducer — parallel fan-out writes the same key, so `Annotated[..., last_value_reducer]` is required. (2) Stub-node shape — single-dict return (no mid-node stream_writer) is sufficient for step 2; real Strategy C emission (message before heavy work) wires in steps 4–7 once there's actual heavy work to pace.
+- **Verification:** Kamen ran the graph-sequence print and confirmed "looks ok" — validate → fundamentals + news (both between) → synthesis.
+- **Comprehension check:** "Signals parallel fan-out" — correct on first try.
+- **Issues encountered:** One spec-API drift caught during `pytest` (list-as-path-map error); fixed in <1 min.
+

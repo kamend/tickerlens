@@ -20,7 +20,7 @@
   Acceptance: Both servers start clean. `curl localhost:8000/health` returns `{ok:true}`. `localhost:3000` shows default Next.js page. No install errors.
   Verify: Run `uv run uvicorn main:app --reload --port 8000` in one terminal and `pnpm dev` in another. Hit both URLs in a browser or via curl.
 
-- [ ] **2. LangGraph skeleton with stub nodes + state + tests**
+- [x] **2. LangGraph skeleton with stub nodes + state + tests**
   Spec ref: `spec.md > LangGraph Orchestrator > State`, `spec.md > LangGraph Orchestrator > Graph Wiring`, `spec.md > Progress Strategy (Strategy C)`
   What to build: Create `backend/graph/state.py` defining `ResearchState` TypedDict per spec. Create stub node modules `backend/graph/nodes/{validate,fundamentals,news,synthesis}.py` — each writes `status_message` plus a hardcoded placeholder payload into state. Wire `backend/graph/graph.py` per spec: `START → validate → conditional_edges → [fundamentals, news] (fan-out) → synthesis → END`. Write `backend/tests/test_graph.py` that runs `compiled.astream(state, stream_mode="updates")` for a fake ticker and asserts the update sequence includes validate → fundamentals + news (both emitted) → synthesis.
   Acceptance: `pytest` is green. Graph executes end-to-end with stubs. Fan-out is visible in the update stream — both `fundamentals` and `news` updates appear between `validate` and `synthesis`.
