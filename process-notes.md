@@ -46,3 +46,29 @@
 - **Active shaping:** Very high. Kamen made every meaningful technical call himself — picked LangGraph, picked Opus/Sonnet split, upgraded fundamentals to LLM call, called the fail-hard policy, picked the confidence indicator, picked Strategy C explicitly with reasoning ("less business logic on UI"), endorsed artificial pacing on first hearing it, chose monorepo + early header emit + .md prompts in one decisive answer. He's in the driver's seat — the role here is competent technical sparring partner, not architect.
 - **PRD open questions resolved:** Q1 (header metrics curation). Q2 + Q3 deferred to /build as planned.
 
+## /checklist
+- **Sequencing decision:** Backend-first, inside-out. Kamen noted his usual instinct is frontend-first with mocks, but explicitly flipped for this project because the learning target (LangGraph + SSE) lives in the backend — strong self-aware sequencing call. Graph skeleton with stubs (step 2) and SSE pacing (step 3) land before any LLM/yfinance work so the new/risky surface is battle-tested early. Endpoints and real agents layer on top (4–7). Frontend consumes a known-good SSE contract (8–9b). Polish + submit closes (10).
+- **Tests:** Kamen asked to add pytest coverage on his own initiative — another signal he's taking the backend learning seriously, not just rushing to a demo.
+- **Build mode:** Step-by-step. Aligned with learning goal — wants to see the LangGraph wiring unfold rather than review a monolithic autonomous build.
+- **Comprehension checks:** Yes for backend/graph items (2–7), off for frontend items. Tailored choice — he recognized frontend is familiar territory and wouldn't benefit from checks, but LangGraph/SSE mechanics should be actively recalled.
+- **Verification:** Yes — per-item. Accepted without pushback.
+- **Check-in cadence:** Learning-driven. Wants decision narration during build, especially on the new orchestration surface.
+- **Git cadence:** Commit per step with `step N: [title]` message format. Accepted immediately.
+- **Demo tickers:** AAPL (safe, rich) + FIG/Figma (learner's suggestion — thematic fit with his design sensibility, fresh IPO surfaces implicit-connection material well). Good creative call.
+- **Gitignore:** Kamen created the local repo mid-conversation and asked for a proper `.gitignore`. Written to cover Python (venv, pytest/mypy/ruff caches), Next.js (node_modules, `.next`, pnpm), env files with `.env.example` preserved, macOS/IDE noise, and retains his pre-existing `.claude/` rule.
+- **Item count + time:** 11 items (one split — 9 → 9a/9b at Kamen's agreement), ~3.5 hours estimated. Backend 1–7 ≈ 2hr, frontend 8–9b ≈ 1hr, polish/submit ≈ 30min.
+- **Split rationale (9 → 9a/9b):** Original step 9 bundled SSE consumer + progress + header + cards + error + 5 components in one item — too big for one step-by-step session. Kamen agreed immediately when flagged. 9a focuses on streaming mechanics + header, 9b focuses on the payoff UI (cards + error).
+- **Submission planning:** Core story lead is three-perspectives + LangGraph orchestration as learning angle. Wow moment identified as implicit connections. Local-only deployment confirmed; demo video recommended (60-90s, YouTube unlisted). GitHub repo already created locally with remote set — no repo-creation needed in submission item.
+- **Confident on:** Sequencing (backend-first flip was his call), methodology choices, git cadence, demo tickers.
+- **Needed guidance on:** Granularity of step 9 (accepted split when flagged), Devpost submission planning details.
+- **Deepening rounds:** 0 chosen. Pattern from /scope, /prd, /spec holds — Kamen moves decisively through mandatory questions and opts to proceed. Rich mandatory-phase conversation gave the checklist strong material without additional probing.
+- **Active shaping:** High. Kamen drove the backend-first flip (against his own default), added pytest coverage on his own initiative, calibrated comprehension checks by domain (backend yes, frontend no), suggested FIG as a second demo ticker tied to his design identity, and agreed to the 9-split quickly when risk was flagged. Decisive, self-aware, owns the plan.
+
+## /build
+
+### Step 1: Project scaffolding (backend + frontend skeletons)
+- **What was built:** Backend and frontend scaffolds were already in place from prior work — verified backend `pyproject.toml` has all required deps (fastapi, uvicorn, langgraph, anthropic, yfinance, pydantic, python-dotenv, sse-starlette, pytest, pytest-asyncio), `main.py` stubs `GET /health`, `.env.example` present. Frontend is Next.js 16 + React 19 + Tailwind 4 + App Router via pnpm, with `.env.local.example` set.
+- **Issues encountered:** `uv sync` failed with `yfinance>=1.2.2` — pin was wrong (real yfinance versioning is 0.2.x). Kamen fixed the pin himself after I flagged it; rejected my edit attempt.
+- **Learner verification:** Confirmed "both the frontend and backend works" after the pin fix.
+- **Notable:** `frontend/AGENTS.md` warns this Next.js version has breaking changes — docs live in `node_modules/next/dist/docs/`. Must consult those before writing frontend code in steps 8–9b.
+
