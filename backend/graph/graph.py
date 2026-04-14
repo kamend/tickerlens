@@ -1,10 +1,10 @@
 from langgraph.graph import END, START, StateGraph
 
-from backend.graph.nodes.fundamentals import fundamentals_agent_node
-from backend.graph.nodes.news import news_agent_node
-from backend.graph.nodes.synthesis import synthesis_agent_node
-from backend.graph.nodes.validate import validate_ticker_node
-from backend.graph.state import ResearchState
+from graph.nodes.fundamentals import fundamentals_agent_node
+from graph.nodes.news import news_agent_node
+from graph.nodes.synthesis import synthesis_agent_node
+from graph.nodes.validate import validate_ticker_node
+from graph.state import ResearchState
 
 
 def _route_after_validate(state: ResearchState):

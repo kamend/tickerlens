@@ -22,6 +22,9 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
+# Convention: backend/ IS the Python project root.
+# Run uvicorn and pytest from inside backend/. All imports are top-level
+# (e.g. `from graph.state import ...`), never prefixed with `backend.`.
 asyncio_mode = "auto"
-pythonpath = [".."]
+pythonpath = ["."]
 testpaths = ["tests"]

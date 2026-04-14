@@ -1,6 +1,6 @@
 import pytest
 
-from backend.graph.graph import build_graph
+from graph.graph import build_graph
 
 
 @pytest.fixture

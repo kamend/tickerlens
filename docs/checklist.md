@@ -27,7 +27,7 @@
   Verify: Run `uv run pytest -v`. Read the assertion output and confirm both parallel branches fire before synthesis.
   Comprehension check: Why does `add_conditional_edges` return a *list* `["fundamentals", "news"]` rather than two separate edges?
 
-- [ ] **3. SSE pacing wrapper + `/research` endpoint (stubbed graph)**
+- [x] **3. SSE pacing wrapper + `/research` endpoint (stubbed graph)**
   Spec ref: `spec.md > Backend > /research endpoint (SSE)`, `spec.md > SSE pacing wrapper`, `spec.md > SSE Event Vocabulary`
   What to build: Implement `backend/sse.py` with a `format_sse(event, data)` helper and an async generator enforcing a 1.2s minimum gap between emitted events (per spec code snippet). Wire `POST /research` in `main.py` using `sse-starlette`'s `EventSourceResponse`, feeding the stubbed graph from step 2. Emit `progress` events keyed off each node's `status_message`. Write `backend/tests/test_sse.py` asserting (a) event format matches `event: ...\ndata: ...\n\n`, (b) two rapid updates emit ≥1.2s apart.
   Acceptance: `curl -N -X POST localhost:8000/research -H "Content-Type: application/json" -d '{"ticker":"AAPL"}'` streams `event: progress` lines paced ≥1.2s apart. Tests green.

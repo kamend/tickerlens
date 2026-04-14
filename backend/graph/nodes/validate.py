@@ -1,4 +1,4 @@
-from backend.graph.state import ResearchState
+from graph.state import ResearchState
 
 
 async def validate_ticker_node(state: ResearchState) -> dict:
