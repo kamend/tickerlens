@@ -62,7 +62,7 @@
   Verify: Manual curl for *both* AAPL and FIG. Read the three arguments for FIG — do they meaningfully disagree, or are they hedged mush? Confidence tags feel honest (thin when evidence is thin)?
   Comprehension check: Why does the spec insist on *one* Opus call producing all three arguments rather than three parallel Opus calls?
 
-- [ ] **8. Frontend — landing screen (`app/page.tsx` + `TickerInput` + `/validate` wiring)**
+- [x] **8. Frontend — landing screen (`app/page.tsx` + `TickerInput` + `/validate` wiring)**
   Spec ref: `spec.md > Frontend > Pages > Landing Screen`, `spec.md > Components > TickerInput`, `spec.md > Visual Design`, `prd.md > Ticker Input`
   What to build: Pick serif font from shortlist (Source Serif 4 / Crimson Pro / Newsreader) and load via `next/font` in `app/layout.tsx`. Set up editorial theme in `app/globals.css` — off-white background, dark slate text, one muted accent (teal or amber — pick by eye). Build `components/TickerInput.tsx`: centered input, inline loader swap on submit, soft error message below (friendly tone per PRD), error clears on next keystroke, retains entered text. Build `lib/api.ts` with `validateTicker(ticker)`. On `{valid:true}` → `router.push("/results/[ticker]")` (results page can be a placeholder for now).
   Acceptance: Landing screen renders with editorial feel (serif, light palette, generous spacing). Submitting AAPL → smooth transition to results route. Submitting ZZZZZ → soft error below input, text retained, error clears on next keystroke. All PRD Ticker Input acceptance criteria met.
