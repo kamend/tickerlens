@@ -41,7 +41,7 @@
   Verify: Run both curls. Run `pytest`.
   Comprehension check: Why does `spec.md` mandate the validate node re-run yfinance even though `/validate` already did?
 
-- [ ] **5. Fundamentals agent (real yfinance + Sonnet) + early header SSE emit**
+- [x] **5. Fundamentals agent (real yfinance + Sonnet) + early header SSE emit**
   Spec ref: `spec.md > Fundamentals Agent`, `spec.md > SSE Event Vocabulary > header`, `prd.md > Research Results > essential company context`
   What to build: Replace fundamentals stub with real implementation — yfinance fetch, extract 6 header metrics (name, ticker, sector, price + %change, market cap, trailing P/E, 52-week range, dividend yield if present), build full `raw_metrics`, call Sonnet 4.6 with prompt from `backend/prompts/fundamentals_summary.md` (write this prompt file). Write `backend/clients/anthropic_client.py` shared SDK client + model constants. Update SSE layer to detect when `state.fundamentals.header` first appears and emit a `header` SSE event mid-stream (before synthesis finishes). Tests mock the Sonnet call; manual verify uses real call.
   Acceptance: `/research` for AAPL emits `progress` events, then a `header` SSE event mid-stream containing all 6 header metrics populated. Sonnet summary returns 2-3 paragraphs of qualitative posture. PRD "essential company context" acceptance criteria met.
