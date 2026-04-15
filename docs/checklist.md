@@ -34,7 +34,7 @@
   Verify: Run the curl command. Count seconds between lines — should feel readable, not machine-gun. Run `pytest`.
   Comprehension check: Why does pacing live in the SSE wrapper rather than inside each graph node?
 
-- [ ] **4. Real `/validate` endpoint + validate node (yfinance)**
+- [x] **4. Real `/validate` endpoint + validate node (yfinance)**
   Spec ref: `spec.md > Backend > /validate endpoint`, `spec.md > Validate Node`
   What to build: Create `backend/clients/yfinance_client.py` — thin wrapper around `yfinance.Ticker(ticker).info`, error normalization (empty dict / missing `longName` → raises a domain error). Wire `POST /validate` synchronously: returns `{valid:true, company_name}` on success, `{valid:false, error:"We couldn't find that ticker..."}` on miss. Replace the stub validate node with the real implementation using the shared client helper. Tests: AAPL (valid), ZZZZZ (invalid), empty string (invalid).
   Acceptance: `curl -X POST localhost:8000/validate -d '{"ticker":"AAPL"}' -H "Content-Type: application/json"` → `{valid:true, company_name:"Apple Inc."}`. Same with `ZZZZZ` → `{valid:false, ...}`. Tests green.
