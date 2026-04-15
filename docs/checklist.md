@@ -48,7 +48,7 @@
   Verify: Manual curl with AAPL — confirm `header` event fires before `result` event (i.e., appears while other nodes still running). Inspect the summary prose — does it read like analyst context, not raw numbers?
   Comprehension check: The header event emits *during* the graph run, not at the end. What's the mechanism that lets the SSE layer detect it at the right moment?
 
-- [ ] **6. News agent (yfinance + Anthropic `web_search` dual-source)**
+- [x] **6. News agent (yfinance + Anthropic `web_search` dual-source)**
   Spec ref: `spec.md > News Agent`, `prd.md > Research Results > implicit connections`
   What to build: Replace news stub with real implementation — `yfinance.Ticker(ticker).news` for company-specific headlines, then Sonnet 4.6 call with `web_search` tool and prompt from `backend/prompts/news_analyst.md` (write this prompt file). Structured output with `direct_news`, `macro_context`, `implicit_connections` (capped 3-5 per spec). 30s soft timeout via `asyncio.wait_for` around the Anthropic call. Fallback to yfinance-only if web_search fails. Tests mock the Anthropic call and verify structure + timeout behavior.
   Acceptance: `/research` for AAPL populates `state.news` with all three fields. Implicit connections list has 3-5 non-obvious items (not just headline restatements). Web search failure degrades gracefully to yfinance-only without killing the run. PRD "implicit connections" criterion met.

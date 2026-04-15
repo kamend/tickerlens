@@ -13,6 +13,7 @@ def _mock_yfinance_for_graph(request, monkeypatch):
 
     import clients.yfinance_client as client
     import graph.nodes.fundamentals as fundamentals_node
+    import graph.nodes.news as news_node
     import graph.nodes.validate as validate_node
 
     def _fake_fetch_info(ticker: str) -> dict:
@@ -33,10 +34,22 @@ def _mock_yfinance_for_graph(request, monkeypatch):
     async def _fake_summary(_raw_metrics: dict) -> str:
         return "Stubbed Sonnet summary."
 
+    def _fake_fetch_news(_ticker: str, limit: int = 8) -> list[dict]:
+        return []
+
+    async def _fake_news_analysis(*_a, **_kw):
+        return {
+            "direct_news": [],
+            "macro_context": [],
+            "implicit_connections": ["Stubbed implicit connection."],
+        }
+
     monkeypatch.setattr(client, "fetch_info", _fake_fetch_info)
     monkeypatch.setattr(validate_node, "fetch_info", _fake_fetch_info)
     monkeypatch.setattr(fundamentals_node, "fetch_info", _fake_fetch_info)
     monkeypatch.setattr(fundamentals_node, "_summarize_with_sonnet", _fake_summary)
+    monkeypatch.setattr(news_node, "fetch_news", _fake_fetch_news)
+    monkeypatch.setattr(news_node, "_analyze_with_sonnet", _fake_news_analysis)
 
 
 def pytest_configure(config):

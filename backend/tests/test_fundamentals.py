@@ -41,6 +41,20 @@ def _patch_external(monkeypatch, fake_info):
 
     monkeypatch.setattr(fundamentals_node, "_summarize_with_sonnet", _fake_summary)
 
+    # The graph-level test below runs the full compiled graph, which includes
+    # the news node. Stub its external I/O here too.
+    import graph.nodes.news as news_node
+
+    async def _fake_news_analyze(*_a, **_kw):
+        return {
+            "direct_news": [],
+            "macro_context": [],
+            "implicit_connections": ["Stubbed connection."],
+        }
+
+    monkeypatch.setattr(news_node, "fetch_news", lambda _t, limit=8: [])
+    monkeypatch.setattr(news_node, "_analyze_with_sonnet", _fake_news_analyze)
+
 
 async def test_header_contains_six_required_fields():
     out = await fundamentals_node.fundamentals_agent_node(
