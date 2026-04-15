@@ -14,7 +14,9 @@ def _mock_yfinance_for_graph(request, monkeypatch):
     import clients.yfinance_client as client
     import graph.nodes.fundamentals as fundamentals_node
     import graph.nodes.news as news_node
+    import graph.nodes.synthesis as synthesis_node
     import graph.nodes.validate as validate_node
+    from schemas.briefing import Argument, Briefing, Citation
 
     def _fake_fetch_info(ticker: str) -> dict:
         return {
@@ -50,6 +52,23 @@ def _mock_yfinance_for_graph(request, monkeypatch):
     monkeypatch.setattr(fundamentals_node, "_summarize_with_sonnet", _fake_summary)
     monkeypatch.setattr(news_node, "fetch_news", _fake_fetch_news)
     monkeypatch.setattr(news_node, "_analyze_with_sonnet", _fake_news_analysis)
+
+    def _stub_argument(label: str) -> Argument:
+        return Argument(
+            summary=f"Stubbed {label} summary.",
+            reasoning=f"Stubbed {label} reasoning.",
+            confidence="moderate",
+            citations=[Citation(title="Stub", url="https://example.com")],
+        )
+
+    async def _fake_synthesis(*_a, **_kw) -> Briefing:
+        return Briefing(
+            buy=_stub_argument("buy"),
+            hold=_stub_argument("hold"),
+            sell=_stub_argument("sell"),
+        )
+
+    monkeypatch.setattr(synthesis_node, "_synthesize_with_opus", _fake_synthesis)
 
 
 def pytest_configure(config):

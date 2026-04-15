@@ -55,7 +55,7 @@
   Verify: Manual curl for AAPL. Inspect the final payload — do the implicit connections actually surface non-obvious links (e.g., "EU regulation X → services revenue risk"), or are they just headlines rephrased?
   Comprehension check: Why is the `web_search` tool attached to the news agent, and not synthesis?
 
-- [ ] **7. Synthesis agent (Opus 4.6 + `emit_briefing` tool) + final `result` SSE event**
+- [x] **7. Synthesis agent (Opus 4.6 + `emit_briefing` tool) + final `result` SSE event**
   Spec ref: `spec.md > Synthesis Agent`, `spec.md > SSE Event Vocabulary > result`, `prd.md > Research Results > three distinct perspectives`
   What to build: Replace synthesis stub with real Opus 4.6 call. Prompt from `backend/prompts/synthesis.md` (write this prompt file). Force `emit_briefing` tool via `tool_choice`. Parse structured tool output into `Briefing` pydantic model (`backend/schemas/briefing.py` with `Citation`, `Argument`, `Briefing`). Fail-hard on upstream errors or Opus failure (no Sonnet fallback) — sets `state.error`, routes to terminal error event. Emit `result` SSE event with the briefing. Full end-to-end test with mocked LLMs covering happy path + upstream error path.
   Acceptance: `/research` for AAPL emits `result` SSE event containing `{buy, hold, sell}`, each with `summary`, `reasoning`, `confidence` (strong/moderate/thin), `citations`. PRD "three distinct perspectives" acceptance criteria met. Tests green.

@@ -55,3 +55,19 @@ async def test_pace_events_first_emits_immediately():
     async for _ in pace_events(_async_iter(events), min_gap=1.0):
         first_at = time.monotonic() - start
     assert first_at < 0.2
+
+
+async def test_graph_events_emits_result_for_happy_path():
+    from graph.graph import build_graph
+    from sse import graph_events
+
+    compiled = build_graph()
+    events = []
+    async for event, data in graph_events(compiled, {"ticker": "FAKE"}):
+        events.append((event, data))
+
+    event_names = [e for e, _ in events]
+    assert "result" in event_names, f"expected a result event, got {event_names}"
+    result_payload = next(d for e, d in events if e == "result")
+    assert set(result_payload.keys()) == {"buy", "hold", "sell"}
+    assert result_payload["buy"]["confidence"] in {"strong", "moderate", "thin"}
