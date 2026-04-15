@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import html
+
 import yfinance
 
 
@@ -24,7 +26,7 @@ def fetch_info(ticker: str) -> dict:
     if not info.get("longName"):
         raise TickerNotFoundError(symbol)
 
-    return info
+    return {k: (html.unescape(v) if isinstance(v, str) else v) for k, v in info.items()}
 
 
 def fetch_news(ticker: str, limit: int = 8) -> list[dict]:
@@ -65,8 +67,8 @@ def fetch_news(ticker: str, limit: int = 8) -> list[dict]:
             continue
         items.append(
             {
-                "title": title,
-                "publisher": publisher,
+                "title": html.unescape(title),
+                "publisher": html.unescape(publisher) if isinstance(publisher, str) else publisher,
                 "published_at": published_at,
                 "url": url,
             }
