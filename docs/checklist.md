@@ -74,7 +74,7 @@
   Acceptance: Navigating to `/results/AAPL` opens the SSE stream, progress messages fade in/out smoothly (no hard cuts), company header arrives mid-stream and replaces loading state without a jarring transition. All PRD Research Progress acceptance criteria met.
   Verify: `pnpm dev`. Enter AAPL on landing, watch the results screen — progress messages should fade (not jump), header should fade/slide in while progress is still running (confirms early-emit is working end-to-end).
 
-- [ ] **9b. Frontend — perspective cards + error state**
+- [x] **9b. Frontend — perspective cards + error state**
   Spec ref: `spec.md > Components > {PerspectiveCards, PerspectiveCard, ErrorState}`, `prd.md > Research Results`, `prd.md > Research Progress > error handling`
   What to build: `components/PerspectiveCards.tsx` renders 3 `PerspectiveCard`s (Buy / Hold / Sell) once the `result` event arrives, fading in as `ProgressDisplay` fades out. `components/PerspectiveCard.tsx`: collapsed shows title (e.g., "The case for buying"), 2-3 sentence summary, small confidence tag ("Evidence: strong/moderate/thin"). Expanded reveals full reasoning paragraphs + citations list with links (URLs open in new tab). Smooth expand/collapse via CSS height transition. `components/ErrorState.tsx` replaces progress area on SSE `error` event — friendly message + "Back" button that smoothly routes to landing.
   Acceptance: End-to-end AAPL flow renders all three cards. Each card expands/collapses smoothly. Citations link out. Error path (e.g., killing backend mid-stream) renders `ErrorState` with working back button. All PRD Research Results + Research Progress error-handling acceptance criteria met.

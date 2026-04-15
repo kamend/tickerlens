@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Briefing, ErrorEvent, HeaderData } from "@/lib/types";
 import { streamResearch } from "@/lib/sse";
 import CompanyHeader from "./CompanyHeader";
 import ProgressDisplay from "./ProgressDisplay";
+import PerspectiveCards from "./PerspectiveCards";
+import ErrorState from "./ErrorState";
 
 interface ResultsViewProps {
   ticker: string;
@@ -64,25 +65,9 @@ export default function ResultsView({ ticker }: ResultsViewProps) {
 
         {showProgress && <ProgressDisplay message={progress} />}
 
-        {briefing && (
-          <section className="animate-fade-in-up">
-            <p className="font-serif text-muted italic">
-              Perspective cards land in step 9b.
-            </p>
-          </section>
-        )}
+        {briefing && <PerspectiveCards briefing={briefing} />}
 
-        {error && (
-          <section className="flex flex-col gap-4 animate-fade-in-up">
-            <p className="font-serif text-lg text-foreground">{error.message}</p>
-            <Link
-              href="/"
-              className="font-sans text-sm text-accent hover:text-accent-hover transition-colors"
-            >
-              ← Back
-            </Link>
-          </section>
-        )}
+        {error && <ErrorState message={error.message} />}
       </div>
     </main>
   );
