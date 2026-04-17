@@ -1,5 +1,8 @@
+import asyncio
 import json
+import os
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -9,11 +12,15 @@ from clients.yfinance_client import TickerNotFoundError, fetch_info
 from graph.graph import compiled
 from sse import graph_events, pace_events
 
+load_dotenv()
+
 app = FastAPI(title="TickerLens Backend")
+
+origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -35,7 +42,7 @@ class ValidateRequest(BaseModel):
 @app.post("/validate")
 async def validate(req: ValidateRequest) -> dict:
     try:
-        info = fetch_info(req.ticker)
+        info = await asyncio.to_thread(fetch_info, req.ticker)
     except TickerNotFoundError as exc:
         return {"valid": False, "error": exc.message}
 

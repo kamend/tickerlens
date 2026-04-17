@@ -1,3 +1,5 @@
+import asyncio
+
 from clients.yfinance_client import TickerNotFoundError, fetch_info
 from graph.state import ResearchState
 
@@ -5,7 +7,7 @@ from graph.state import ResearchState
 async def validate_ticker_node(state: ResearchState) -> dict:
     ticker = state["ticker"]
     try:
-        info = fetch_info(ticker)
+        info = await asyncio.to_thread(fetch_info, ticker)
     except TickerNotFoundError as exc:
         return {
             "status_message": f"Looking up {ticker}...",

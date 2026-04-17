@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from typing import Any
@@ -92,7 +93,7 @@ async def fundamentals_agent_node(state: ResearchState) -> dict:
     status = f"Reading {company_name}'s fundamentals..."
 
     try:
-        info = fetch_info(ticker)
+        info = await asyncio.to_thread(fetch_info, ticker)
         header = _build_header(info, ticker)
         raw_metrics = _build_raw_metrics(info)
 

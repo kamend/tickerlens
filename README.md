@@ -20,18 +20,18 @@ A small multi-agent system orchestrated with **LangGraph**:
 
 ```
 START → validate → ┬─ fundamentals (Sonnet 4.6) ─┐
-                   └─ news (Sonnet 4.6 + web_search) ─┼→ synthesis (Opus 4.6) → END
+                   └─ news (Sonnet 4.6 + web_search) ─┼→ synthesis (Opus 4.7) → END
 ```
 
 - **Validate** — confirms the ticker exists via yfinance before any LLM spend.
 - **Fundamentals agent** — pulls yfinance data, builds header metrics, writes an editorial posture summary with Claude Sonnet 4.6. The header is emitted *mid-stream* via LangGraph's custom stream channel so the UI fills in while news is still working.
 - **News agent** — yfinance headlines + Anthropic's `web_search` tool (Sonnet 4.6) for macro context and implicit connections. Falls back to yfinance-only if search fails.
-- **Synthesis agent** — Claude Opus 4.6 reads both dossiers and produces all three arguments in a single call, using a forced `emit_briefing` tool for structured output. One call so the cases can coherently *disagree*.
+- **Synthesis agent** — Claude Opus 4.7 reads both dossiers and produces all three arguments in a single call, using a forced `emit_briefing` tool for structured output. One call so the cases can coherently *disagree*.
 - **Streaming** — Server-Sent Events over FastAPI with a pacing wrapper (≥1.2s between progress messages) so the UI feels considered, not machine-gun.
 
 ## Tech stack
 
-**Backend:** Python 3.11+, FastAPI, LangGraph, Anthropic SDK (Claude Opus 4.6 + Sonnet 4.6), yfinance, Pydantic, `sse-starlette`, uv.
+**Backend:** Python 3.11+, FastAPI, LangGraph, Anthropic SDK (Claude Opus 4.7 + Sonnet 4.6), yfinance, Pydantic, `sse-starlette`, uv.
 
 **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS, `@microsoft/fetch-event-source`, Source Serif 4 + Inter via `next/font`.
 
@@ -60,6 +60,8 @@ cd tickerlens
 cd backend
 cp .env.example .env
 # edit .env and set ANTHROPIC_API_KEY=sk-ant-...
+# optionally set CORS_ORIGINS to a comma-separated list of allowed frontend URLs
+# (defaults to http://localhost:3000)
 
 uv sync
 uv run uvicorn main:app --reload --port 8000
@@ -79,7 +81,8 @@ In a second terminal:
 ```bash
 cd frontend
 cp .env.local.example .env.local
-# default points to http://localhost:8000 — edit only if you changed the backend port
+# set NEXT_PUBLIC_API_URL to your backend URL (defaults to http://localhost:8000)
+# for production, point it at your deployed backend (e.g. https://api.yourapp.com)
 
 pnpm install
 pnpm dev
@@ -144,4 +147,4 @@ uv run pytest -v
 
 ## License
 
-MIT (or your preference — add a `LICENSE` file).
+[MIT](LICENSE)

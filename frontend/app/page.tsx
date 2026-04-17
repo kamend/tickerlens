@@ -2,7 +2,7 @@ import TickerInput from "@/components/TickerInput";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-6 py-16">
+    <main className="flex flex-1 flex-col items-center justify-center px-6 py-16 animate-fade-in-up">
       <div className="w-full max-w-2xl flex flex-col items-center text-center gap-10">
         <header className="flex flex-col gap-3">
           <p className="font-sans text-sm uppercase tracking-[0.3em] text-foreground">
