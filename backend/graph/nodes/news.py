@@ -170,7 +170,7 @@ async def news_agent_node(state: ResearchState) -> dict:
     company_name = state.get("company_name") or ticker
     status = "Scanning recent news and macro context..."
 
-    yfinance_headlines = fetch_news(ticker)
+    yfinance_headlines = await asyncio.to_thread(fetch_news, ticker)
     logger.info(
         "news agent: yfinance returned %d headlines for %s",
         len(yfinance_headlines),

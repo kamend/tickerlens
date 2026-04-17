@@ -17,7 +17,7 @@
 
 **LLM:** [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python).
 - **Sonnet 4.6** (`claude-sonnet-4-6`) — fundamentals summary, news/macro analyst (with `web_search` tool).
-- **Opus 4.6** (`claude-opus-4-6`) — synthesis (Buy/Hold/Sell briefing).
+- **Opus 4.7** (`claude-opus-4-7`) — synthesis (Buy/Hold/Sell briefing).
 - [Claude `web_search` tool docs](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/partner-models/claude/web-search) — same API on the Anthropic endpoint.
 
 **Market data:** [yfinance](https://pypi.org/project/yfinance/) — free Python wrapper around Yahoo Finance.
@@ -295,12 +295,12 @@ This keeps progress messaging genuinely backend-driven — no UI guessing.
 
 **Implements:** `prd.md > Research Results > three distinct perspectives Buy/Hold/Sell`.
 
-The heart of the app. **Single Opus 4.6 call** producing all three arguments in one structured response — guarantees internal consistency and meaningful disagreement between the cases.
+The heart of the app. **Single Opus 4.7 call** producing all three arguments in one structured response — guarantees internal consistency and meaningful disagreement between the cases.
 
 ```
 1. Check for upstream errors (fundamentals_error or news_error) → set state.error, END.
 2. Write status_message = "Building the case for each perspective..."
-3. Opus 4.6 call with prompt @ prompts/synthesis.md
+3. Opus 4.7 call with prompt @ prompts/synthesis.md
    Tools: [emit_briefing]  (forced via tool_choice)
    Input:
      - ticker, company_name
@@ -558,7 +558,7 @@ tickerlens/
 
 ### 2. Single synthesis call (vs. three parallel argument calls)
 
-**Decision:** One Opus 4.6 call producing all three arguments via structured tool output.
+**Decision:** One Opus 4.7 call producing all three arguments via structured tool output.
 **Why:** Coherence — the model weighs the same evidence three ways in one context window, so cases meaningfully disagree without contradicting. Cheaper too (one input, three outputs).
 **Tradeoff accepted:** Each argument gets less "airtime" than if it had its own dedicated call. Mitigated by the prompt explicitly demanding distinct, meaningful disagreement and by Opus's reasoning depth.
 
@@ -586,7 +586,7 @@ tickerlens/
 
 | Service | Purpose | Auth | Cost / Limits |
 |---|---|---|---|
-| [Anthropic API](https://docs.anthropic.com/) | Sonnet 4.6 (fundamentals, news), Opus 4.6 (synthesis), `web_search` tool | `ANTHROPIC_API_KEY` env var | Per-token usage. `web_search` tool has its own per-search pricing. Local-only deployment caps total cost. |
+| [Anthropic API](https://docs.anthropic.com/) | Sonnet 4.6 (fundamentals, news), Opus 4.7 (synthesis), `web_search` tool | `ANTHROPIC_API_KEY` env var | Per-token usage. `web_search` tool has its own per-search pricing. Local-only deployment caps total cost. |
 | [Yahoo Finance via yfinance](https://pypi.org/project/yfinance/) | `Ticker.info` (fundamentals), `Ticker.news` (headlines) | None | Free. Unofficial — can rate-limit or break without notice. ⚠️ `financials`/`balance_sheet`/`cashflow` methods broken — do NOT use. |
 
 ### Backend Python Dependencies

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MODEL_SONNET = "claude-sonnet-4-6"
-MODEL_OPUS = "claude-opus-4-6"
+MODEL_OPUS = "claude-opus-4-7"
 
 
 @lru_cache(maxsize=1)
