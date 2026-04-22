@@ -90,6 +90,42 @@ pnpm dev
 
 Open **http://localhost:3000** and enter a ticker.
 
+### Run with Docker
+
+A single-image setup that bundles both backend and frontend is provided. The frontend calls the backend over loopback inside the container, so only port `3000` needs to be exposed.
+
+**Prerequisites:** Docker 20.10+ and an Anthropic API key.
+
+```bash
+# Build the image (from the repo root)
+docker build -t tickerlens .
+
+# Run it
+docker run --rm -p 3000:3000 \
+  -e ANTHROPIC_API_KEY=sk-ant-... \
+  tickerlens
+```
+
+Open **http://localhost:3000**.
+
+Alternatively, keep your key in a file and pass it via `--env-file`:
+
+```bash
+# backend/.env already has ANTHROPIC_API_KEY=sk-ant-...
+docker run --rm -p 3000:3000 --env-file backend/.env tickerlens
+```
+
+**Configurable env vars:**
+
+| Variable            | Default                  | Purpose                                              |
+| ------------------- | ------------------------ | ---------------------------------------------------- |
+| `ANTHROPIC_API_KEY` | — (required)             | Claude API key                                       |
+| `CORS_ORIGINS`      | `http://localhost:3000`  | Comma-separated allowed frontend origins             |
+| `FRONTEND_PORT`     | `3000`                   | Port the Next.js server listens on inside the container |
+| `BACKEND_PORT`      | `8000`                   | Port uvicorn listens on inside the container (loopback only) |
+
+To expose on a different host port, remap with `-p`, e.g. `-p 8080:3000`.
+
 ---
 
 ## Usage
