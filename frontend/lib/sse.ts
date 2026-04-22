@@ -29,6 +29,8 @@ export function streamResearch(
       }
     },
     onmessage: (msg) => {
+
+      console.log(msg)
       if (!msg.event || !msg.data) return;
       let parsed: unknown;
       try {

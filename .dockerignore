@@ -1,0 +1,51 @@
+# Git / editor / workspace
+**/.git
+**/.gitignore
+**/.github
+**/.claude
+**/.vscode
+**/.idea
+**/.DS_Store
+
+# Secrets and local env (pass at runtime via -e or --env-file)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Python build artefacts / venv / caches
+**/.venv
+**/venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/build
+**/dist
+**/*.egg-info
+
+# Node / Next.js build artefacts
+**/node_modules
+**/.next
+**/out
+**/.pnpm-store
+**/*.tsbuildinfo
+**/pnpm-debug.log*
+**/npm-debug.log*
+**/yarn-error.log*
+
+# Test / coverage
+**/.coverage
+**/coverage.xml
+**/htmlcov
+
+# Repo-level docs / notes
+docs/
+process-notes.md
+
+# Misc
+**/*.log
+**/tmp
+**/.tmp
+Dockerfile
+.dockerignore
