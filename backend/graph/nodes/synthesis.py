@@ -94,7 +94,7 @@ async def _synthesize_with_opus(
 
     response = await client.messages.create(
         model=MODEL_OPUS,
-        max_tokens=4096,
+        max_tokens=16384,
         system=system_prompt,
         tools=[EMIT_BRIEFING_TOOL],
         tool_choice={"type": "tool", "name": "emit_briefing"},
